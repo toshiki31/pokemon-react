@@ -1,62 +1,81 @@
 import { useEffect, useState } from "react";
 import PokemonThumbnails from "./PokemonThumbnails";
+import pokemonJson from "./pokemon.json";
+import pokemonTypeJson from "./pokemonType.json";
 
 function App() {
   const [allPokemons, setAllPokemons] = useState([]);
+
+  // APIからデータを取得
+  // パラメータにLimitを設定し, 20件ずつ取得
+  const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon?limit=20");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getAllPokemons = () => {
+    console.log("getAllPokemons called!!");
+    setIsLoading(true);
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        // 次の20件をURLにセットする
+        setUrl(data.next);
+        createPokemonObject(data.results);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   const createPokemonObject = (results) => {
     results.forEach((pokemon) => {
       const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`;
       fetch(pokemonUrl)
         .then((res) => res.json())
-        .then((data) => {
-          const image = data.sprites.other["official-artwork"].front_default;
-          const type = data.types[0].type.name;
-          console.log(data.name, image, type);
+        .then(async (data) => {
+          console.log(data);
+          const _image = data.sprites.other["official-artwork"].front_default;
+          const _iconImage = data.sprites.other.dream_world.front_default;
+          const _type = data.types[0].type.name;
+          const japanese = await translateToJapanese(data.name, _type);
+          const newList = {
+            id: data.id,
+            name: data.name,
+            image: _image,
+            iconImage: _iconImage,
+            type: _type,
+            jpName: japanese.name,
+            jpType: japanese.type,
+          };
+          // 既存のデータを展開し, 新しいデータを追加する
+          setAllPokemons((currentList) =>
+            [...currentList, newList].sort((a, b) => a.id - b.id)
+          );
         });
     });
   };
 
-  // 仮でデータを配列にする
-  const pokemons = [
-    {
-      id: 1,
-      name: "フシギダネ",
-      image:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      type: "くさ",
-    },
-    {
-      id: 2,
-      name: "フシギソウ",
-      image:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
-      type: "くさ",
-    },
-    {
-      id: 3,
-      name: "フシギバナ",
-      image:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png",
-      type: "くさ",
-    },
-  ];
-
-  // APIからデータを取得する
-  const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon");
-  const getAllPokemons = () => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setAllPokemons(data.results);
-        createPokemonObject(data.results);
-
-        // 次の20件をURLにセットする
-        setUrl(data.next);
-      });
+  const translateToJapanese = async (name, type) => {
+    const jpName = await pokemonJson.find(
+      (pokemon) => pokemon.en.toLowerCase() === name
+    ).ja;
+    const jpType = await pokemonTypeJson[type];
+    return { name: jpName, type: jpType };
   };
 
   useEffect(() => {
-    getAllPokemons();
+    let ignore = false;
+    const startFetching = () => {
+      if (!ignore) {
+        console.log("1回目は呼ばれるよ");
+        getAllPokemons();
+      }
+      console.log("2回目以降は呼ばれないよ");
+    };
+    startFetching();
+    return () => {
+      ignore = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -64,17 +83,26 @@ function App() {
       <h1>ポケモン図鑑</h1>
       <div className="pokemon-container">
         <div className="all-container">
-          {/* 仮で３つの子コンポーネントを表示する */}
-          {pokemons.map((pokemon, index) => (
+          {allPokemons.map((pokemon, index) => (
             <PokemonThumbnails
               id={pokemon.id}
-              name={allPokemons[index]?.name}
+              name={pokemon.name}
               image={pokemon.image}
+              iconImage={pokemon.iconImage}
               type={pokemon.type}
               key={index}
+              jpName={pokemon.jpName}
+              jpType={pokemon.jpType}
             />
           ))}
         </div>
+        {isLoading ? (
+          <button className="load-more">now loading...</button>
+        ) : (
+          <button className="load-more" onClick={getAllPokemons}>
+            view more!
+          </button>
+        )}
       </div>
     </div>
   );
