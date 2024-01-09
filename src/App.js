@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PokemonThumbnails from "./PokemonThumbnails";
 
 function App() {
+  const [pokemonNames, setPokemonNames] = useState([]);
+
   // 仮でデータを配列にする
-  const pokemon = [
+  const pokemons = [
     {
       id: 1,
       name: "フシギダネ",
@@ -33,7 +35,14 @@ function App() {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log(data.results[0].name);
+        // 仮で3つのポケモンの名前をセットする
+        const names = [
+          data.results[0].name,
+          data.results[1].name,
+          data.results[2].name,
+        ];
+        setPokemonNames(names);
       });
   }, []);
 
@@ -43,24 +52,15 @@ function App() {
       <div className="pokemon-container">
         <div className="all-container">
           {/* 仮で３つの子コンポーネントを表示する */}
-          <PokemonThumbnails
-            id={pokemon[0].id}
-            name={pokemon[0].name}
-            image={pokemon[0].image}
-            type={pokemon[0].type}
-          />
-          <PokemonThumbnails
-            id={pokemon[1].id}
-            name={pokemon[1].name}
-            image={pokemon[1].image}
-            type={pokemon[1].type}
-          />
-          <PokemonThumbnails
-            id={pokemon[2].id}
-            name={pokemon[2].name}
-            image={pokemon[2].image}
-            type={pokemon[2].type}
-          />
+          {pokemons.map((pokemon, index) => (
+            <PokemonThumbnails
+              id={pokemon.id}
+              name={pokemonNames[index]}
+              image={pokemon.image}
+              type={pokemon.type}
+              key={index}
+            />
+          ))}
         </div>
       </div>
     </div>
