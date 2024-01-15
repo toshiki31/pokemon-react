@@ -1,13 +1,205 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.rock {
+  background-color: #b8a038;
+}
+
+.ghost {
+  background-color: #705898;
+}
+
+.electric {
+  background-color: #f8d030;
+}
+
+.bug {
+  background-color: #a8b820;
+}
+
+.poison {
+  background-color: #a040a0;
+}
+
+.normal {
+  background-color: #a8a878;
+}
+
+.fairy {
+  background-color: #ee99ac;
+}
+
+.fire {
+  background-color: #f08030;
+}
+
+.flying {
+  background-color: #a890f0;
+}
+
+.grass {
+  background-color: #78c850;
+}
+
+.water {
+  background-color: #6890f0;
+}
+
+.dark {
+  background-color: #705848;
+}
+
+.psychic {
+  background-color: #f85888;
+}
+
+.ground {
+  background-color: #e0c068;
+}
+
+.steel {
+  background-color: #b8b8d0;
+}
+
+.fighting {
+  background-color: #c03028;
+}
+
+.ice {
+  background-color: #98d8d8;
+}
+
+.dragon {
+  background-color: #7038f8;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3rem 0.5rem;
+}
+
+.pokemon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  margin: auto;
+}
+
+.all-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+  margin: 0.3rem;
+  border: 1px solid #efefef;
+  border-radius: 0.2rem;
+  min-width: 160px;
+  text-align: center;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.089);
+  transition: 0.3s;
+  position: relative;
+  cursor: pointer;
+}
+
+.thumb-container:hover {
+  transform: scale(1.2);
+  z-index: 100;
+}
+
+h3 {
+  margin-bottom: 0.2rem;
+}
+
+.thumb-container .number {
+  border-radius: 1rem;
+  padding: 0.2rem 0.4rem;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.thumb-container img {
+  width: 120px;
+  height: 120px;
+}
+
+.thumb-container .icon-image {
+  border: 1px solid #000;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.thumb-container:hover .icon-image {
+  display: block;
+}
+
+.thumb-container small {
+  /* text-transform: capitalize; */
+}
+
+.detail-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.detail-wrapper button {
+  color: rgb(22, 22, 22);
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.185);
+}
+
+.detail-wrapper h3,
+h4 {
+  margin: 0.2rem;
+}
+
+.detail-wrapper h4 {
+  font-weight: normal;
+}
+
+.load-more {
+  background: #f5f5f5 linear-gradient(#f5f5f5, #f1f1f1) repeat-x;
+  border-radius: 2px;
+  border: 1px solid #c6c6c6;
+  color: #444;
+  padding: 0.5rem 1.5rem;
+  min-width: min(200px, 50%);
+  margin-top: 1rem;
+  cursor: pointer;
+  text-align: center;
 }
