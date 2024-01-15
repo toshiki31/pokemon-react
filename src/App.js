@@ -56,7 +56,7 @@ function App() {
             jpType:
               japanese.length === 1
                 ? japanese[0].type
-                : `${japanese[0].type}・${japanese[1].type}`,
+                : `${japanese[0].type} ${japanese[1].type}`,
           };
           // 既存のデータを展開し, 新しいデータを追加する
           setAllPokemons((currentList) =>

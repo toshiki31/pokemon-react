@@ -18,8 +18,8 @@ const PokemonThumbnails = ({
       <img src={image} alt={name} />
       <img src={iconImage} alt={name} className="icon-image" />
       <div className="detail-wrapper">
-        <h4>{jpName}</h4>
-        <h3>{jpType}</h3>
+        <h3>{jpName}</h3>
+        <h4>{jpType}</h4>
       </div>
     </div>
   );
