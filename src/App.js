@@ -35,16 +35,28 @@ function App() {
           console.log(data);
           const _image = data.sprites.other["official-artwork"].front_default;
           const _iconImage = data.sprites.other.dream_world.front_default;
-          const _type = data.types[0].type.name;
-          const japanese = await translateToJapanese(data.name, _type);
+          const _type =
+            data.types.length === 1
+              ? [data.types[0].type.name]
+              : [data.types[0].type.name, data.types[1].type.name];
+          const japanese =
+            _type.length === 1
+              ? [await translateToJapanese(data.name, _type[0])]
+              : [
+                  await translateToJapanese(data.name, _type[0]),
+                  await translateToJapanese(data.name, _type[1]),
+                ];
           const newList = {
             id: data.id,
             name: data.name,
             image: _image,
             iconImage: _iconImage,
-            type: _type,
-            jpName: japanese.name,
-            jpType: japanese.type,
+            type: _type[0],
+            jpName: japanese[0].name,
+            jpType:
+              japanese.length === 1
+                ? japanese[0].type
+                : `${japanese[0].type} ${japanese[1].type}`,
           };
           // 既存のデータを展開し, 新しいデータを追加する
           setAllPokemons((currentList) =>
